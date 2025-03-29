@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- A.S: using EN since the main customer will be US-based -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Supplement Order</title>
+
+<body>
+    <h1>Supplement Order Form</h1>
+    <form action="/aws/us-1/startup-overpriced-EC2-instace/submit_order" method="POST">
+        <!-- A.S: suppose that https://aws.amazon.com/eventbridge/integrations/shopify/ -->
+        <fieldset> <!-- A.S: https://www.w3schools.com/html/html_form_input_types.asp used for input types-->
+            <legend>Personal Information</legend>
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" required>
+            <!-- A.S: the name is used by the backend to parse the data inputted.-->
+            <br>
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" required>
+            <br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <br>
+
+            <label for="phone">Phone Number:</label>
+            <!-- A.S: in the next iteration, with js we could have a dynamic phone code list (and as for the startup) with outsourced third party SaaS that will handle the verif. codes/etc...-->
+            <input type="tel" id="phone" name="phone" required>
+            <br>
+        </fieldset>
+        <fieldset>
+            <legend>Shipping Information</legend>
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" required>
+            <br>
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+            <br>
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+            <br>
+            <label for="address">Shipping Address:</label>
+            <input type="text" id="address" name="address" required>
+            <br>
+            <label for="pcode">Postal Code:</label>
+            <input type="text" id="pcode" name="pcode" required>
+            <br>
+        </fieldset>
+        <fieldset>
+            <legend> Order </legend>
+            <label for="supplement">Select Supplement Subscription:</label>
+            <!-- A.S: the model is a sub-like, generalized solution, so the UX is frictionless -->
+            <select id="supplement" name="supplement" required>
+                <option value="protein">Proteinogenesis</option>
+                <option value="akgcreatine">Energoergy</option>
+                <option value="electrolytesbcaa">Homeostasys</option>
+                <option value="multivitamin">Enzyme Regulation</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"><br>
+            <label for="additional">Additional Information</label><br>
+            <textarea id="additional" name="additional" rows="4" cols="44"></textarea>
+            <br><br>
+            <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+            <label for="acceptTerms">I accept the terms of service and conditions.</label>
+        </fieldset>
+        <br> <br>
+        <input type="submit" value="Submit Order">
+    </form>
+    <p>
+        <i>Thank you for your vote of confidence in our products</i>
+    </p>
+</body>
+
+</html>
