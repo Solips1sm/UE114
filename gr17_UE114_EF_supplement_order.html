@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- M.F: using EN since the main customer will be US-based -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Supplement Order</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <!--A.S: https://www.twilio.com/en-us/blog/international-phone-number-input-html-javascript#What-can-the-intl-tel-input-plugin-do -->
+    <!--A.S: somebody made a country picker based on the tel picker : "https://github.com/mrmarkfrench/country-select-js" so we will use it. 
+    What alarms me the most, is that the libs were made in that order, and not the opposite : ) -->
+    <!-- We wanted to keep this a mono index.html - the github guide wants us to have .css and .js as locales 
+    - found the remotes at : https://cdnjs.com/libraries/country-select-js -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/css/countrySelect.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/js/countrySelect.min.js"></script>
+    <style>
+        .country-select .flag {
+            /* A.S: the initial lib is enforcing a local file for the flag at : https://github.com/mrmarkfrench/country-select-js/blob/master/build/css/countrySelect.css 
+            so I 've changed the flag class to use it's bg-image from the remote specified at cdnjs 
+            it's simply an inline img with all the flags - the lib has a custom selector that creates
+            the flag sprite from the orig. single img. at: https://github.com/mrmarkfrench/country-select-js/blob/master/src/scss/_sprites.scss*/
+            background-image: url(https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/img/flags.png); /* url method as data pointer in https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/CSS_data_types */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Supplement Order Form</h1>
+    <form action="/aws/us-1/startup-overpriced-EC2-instace/submit_order" method="POST">
+        <!-- A.S: suppose that https://aws.amazon.com/eventbridge/integrations/shopify/ -->
+        <fieldset> <!-- M.F: https://www.w3schools.com/html/html_form_input_types.asp used for input types-->
+            <legend>Personal Information</legend>
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" required>
+            <!-- A.S: JS post-processing ideas: check if numbers present in names, rend invalid. (1)-->
+            <!-- A.S: the name att is used by the backend to parse the data inputted.-->
+            <br>
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" required> <!-- (1) here too-->
+            <br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <br>
+
+            <label for="phone">Phone Number:</label>
+            <!-- A.S: in the next iteration, with js we could have a dynamic phone code list (and as for the startup) with outsourced third party SaaS that will handle the verif. codes/etc...-->
+            <input type="tel" id="phone" name="phone" required>
+            <br>
+        </fieldset>
+        <fieldset>
+            <legend>Shipping Information</legend>
+            <label for="country">Country:</label> <!-- country list..?-->
+            <input type="text" id="country" name="country" required>
+            <br>
+            <label for="city">City:</label> <!-- cannot have sp. chars/numbers-->
+            <input type="text" id="city" name="city" required>
+            <br>
+            <label for="state">State:</label> <!-- cannot have sp. chars/numbers-->
+            <input type="text" id="state" name="state" required>
+            <br>
+            <label for="address">Shipping Address:</label> <!-- cannot have sp. chars-->
+            <input type="text" id="address" name="address" required>
+            <br>
+            <label for="pcode">Postal Code:</label> <!-- cannot have sp. chars-->
+            <input type="text" id="pcode" name="pcode" required>
+            <!-- A.S: some countries have no postal code. some do. https://www.reddit.com/r/MapPorn/comments/kie19v/countries_without_postcodes/ 
+            I am thinking (but won't do it :) ) of a sub-delegation logic that uses the list of countries that have no postal code, then makes an intersect with the main country list and then enforces the required
+            param for them in that country is not lacking a postal code system. there is a list at: https://worldpopulationreview.com/country-rankings/countries-without-postal-codes -->
+            <br>
+        </fieldset>
+        <fieldset>
+            <legend> Order Details</legend>
+            <label for="supplement">Select Supplement Subscription:</label>
+            <!-- A.S: the model is a sub-like, generalized solution, so the UX is frictionless -->
+            <select id="supplement" name="supplement" required>
+                <option value="protein">Proteinogenesis</option>
+                <option value="akgcreatine">Energoergy</option>
+                <option value="electrolytesbcaa">Homeostasys</option>
+                <option value="multivitamin">Enzyme Regulation</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"><br>
+            <label for="additional">Additional Information</label><br>
+            <textarea id="additional" name="additional" rows="4" cols="44"></textarea>
+            <br><br>
+            <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+            <label for="acceptTerms">I accept the terms of service and conditions.</label>
+        </fieldset>
+        <br> <br>
+        <input type="submit" value="Submit Order">
+    </form>
+    <p>
+        <i>Thank you for your vote of confidence in our products</i>
+    </p>
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            // A.S: so input by definition cannot be null/empty since we use required in the form. we also do not ask for birth date since supplements are not age-restricted (FDA regulations).
+            // are there edge-cases for that? - https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/required - seems like not, so I guess our main post-processing would be regex-like logic,
+            // implementing a REST-based country list since we cannot cross-validate whether a country inputted exists/is correctly spelled.
+            // to that extent, the country postal code are also impossible to validate, since some by definition have no postal code
+            // or have indented numbers or letters. one thing is sure, we cannot have special chars in them (and anything else except additional info textarea)
+            // get the fname and lname input elements, and validate on submit if they have any numbers in them/special chars.
+            function hasSpecilianaChariana(str, gigi = false) { // M.F: regex to check if the input has any numbers or special chars taken from - "https://stackoverflow.com/questions/32311081/check-for-special-characters-in-string"
+                var regexiana = /[0-9!@#$%^&*(),.?"':;{}|<>]/;
+                if (gigi) { // A.S: added gigi 'param' for address (some may be like "123 Hihi St." or "456 Haha St. Apt '7a' ") etc.
+                    regexiana = /[!@#$%^&*()?:;{}|<>]/;
+                }
+                return regexiana.test(str);
+            }
+            document.getElementById("fname").addEventListener("input", function () {
+                if (hasSpecilianaChariana(this.value)) { // A.S: added some other chars to regex
+                    this.setCustomValidity("Please enter a valid first name without numbers or special characters, please!"); // A.S: https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/setCustomValidity
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+            document.getElementById("lname").addEventListener("input", function () {
+                if (hasSpecilianaChariana(this.value)) { 
+                    this.setCustomValidity("Please enter a valid last name without numbers or special characters, please!");
+                } else {
+                    this.setCustomValidity("");
+                }
+
+            });
+            // A.S: we could also add a check for the email address (handled via type att, not a critical required field, but still) https://stackoverflow.com/a/9204568
+            function isValidianaEmailiana(email) {
+                var regexiana = /\S+@\S+\.\S+/;
+                return regexiana.test(email);
+            }
+            document.getElementById("email").addEventListener("input", function () {
+                if (!isValidianaEmailiana(this.value)) { // A.S: regex to check if the input is a valid email address - something like : "sdfsd@s.c" will pass xD; long-term may have a whitelist/poller(like a ping maybe?) to the domain name of email to validate.
+                    this.setCustomValidity("Please enter a valid email address. The given one is simply wrong or invalid!");
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+            // A.S: found this cool background story of a phone validation lib (OSS by Google) being ported by a guy to js and GitHub literally banning him from the platform. He transitioned to GitLab https://www.npmjs.com/package/libphonenumber-js
+
+            var phoneInput = window.intlTelInput(document.getElementById("phone"), {
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js", // https://github.com/jackocnr/intl-tel-input
+                initialCountry: "us", // A.S: there even was this option to use an API to auto-get the country, but went minimilalistic.
+            });
+
+            // given the "framework" of the imported lib, we simply validate phone number, enforcing it via using setCustomValidity
+            document.getElementById("phone").addEventListener("input", function () {
+                if (!phoneInput.isValidNumber()) {
+                    this.setCustomValidity("Please enter a valid phone number!");
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+
+            $("#country").countrySelect({
+                defaultCountry: "us",
+            });
+            document.getElementById("state").addEventListener("input", function () {
+                if (hasSpecilianaChariana(this.value) || this.value.length < 2) {
+                    this.setCustomValidity("Please enter a valid state name!" + (hasSpecilianaChariana(this.value) ? " The given one is simply wrong or invalid!" : " The given one is too short! (<2 chars)")); // A.S: just had to throw a ternary in, because I can : )
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+
+            document.getElementById("address").addEventListener("input", function () {
+                if (hasSpecilianaChariana(this.value, true) || this.value.length < 2) {
+                    this.setCustomValidity("Please enter a valid street name!" + (hasSpecilianaChariana(this.value) ? " The given one is simply wrong or invalid!" : " The given one is too short! (<2 chars)"));
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+
+                document.getElementById("pcode").addEventListener("input", function () { // A.S: long story short: https://stackoverflow.com/a/578457
+                if (hasSpecilianaChariana(this.value) || this.value.length < 2) {
+                    this.setCustomValidity("Please enter a valid street name!" + (hasSpecilianaChariana(this.value) ? " The given one is simply wrong or invalid!" : " The given one is too short! (<2 chars)"));
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>
