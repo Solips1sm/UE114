@@ -159,6 +159,7 @@
             $("#country").countrySelect({
                 defaultCountry: "us",
             });
+
             document.getElementById("state").addEventListener("input", function () {
                 if (hasSpecilianaChariana(this.value) || this.value.length < 2) {
                     this.setCustomValidity("Please enter a valid state name!" + (hasSpecilianaChariana(this.value) ? " The given one is simply wrong or invalid!" : " The given one is too short! (<2 chars)")); // A.S: just had to throw a ternary in, because I can : )
