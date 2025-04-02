@@ -21,7 +21,8 @@
             so I 've changed the flag class to use it's bg-image from the remote specified at cdnjs 
             it's simply an inline img with all the flags - the lib has a custom selector that creates
             the flag sprite from the orig. single img. at: https://github.com/mrmarkfrench/country-select-js/blob/master/src/scss/_sprites.scss*/
-            background-image: url(https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/img/flags.png); /* url method as data pointer in https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/CSS_data_types */
+            background-image: url(https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/img/flags.png);
+            /* url method as data pointer in https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/CSS_data_types */
         }
     </style>
 </head>
@@ -73,9 +74,10 @@
         </fieldset>
         <fieldset>
             <legend> Order Details</legend>
-            <label for="supplement">Select Supplement Subscription:</label>
+            <label for="supplement">Supplement Subscription:</label>
             <!-- A.S: the model is a sub-like, generalized solution, so the UX is frictionless -->
-            <select id="supplement" name="supplement" required>
+            <select id="supplement" name="supplement" required size="1">
+                <option value="">Select a supplement</option>
                 <option value="protein">Proteinogenesis</option>
                 <option value="akgcreatine">Energoergy</option>
                 <option value="electrolytesbcaa">Homeostasys</option>
@@ -119,7 +121,7 @@
                 }
             });
             document.getElementById("lname").addEventListener("input", function () {
-                if (hasSpecilianaChariana(this.value)) { 
+                if (hasSpecilianaChariana(this.value)) {
                     this.setCustomValidity("Please enter a valid last name without numbers or special characters, please!");
                 } else {
                     this.setCustomValidity("");
@@ -173,9 +175,19 @@
                 }
             });
 
-                document.getElementById("pcode").addEventListener("input", function () { // A.S: long story short: https://stackoverflow.com/a/578457
+            document.getElementById("pcode").addEventListener("input", function () { // A.S: long story short: https://stackoverflow.com/a/578457
                 if (hasSpecilianaChariana(this.value) || this.value.length < 2) {
-                    this.setCustomValidity("Please enter a valid street name!" + (hasSpecilianaChariana(this.value) ? " The given one is simply wrong or invalid!" : " The given one is too short! (<2 chars)"));
+                    this.setCustomValidity("Please enter a valid postal code!" + (hasSpecilianaChariana(this.value) ? " The given one is simply wrong or invalid!" : " The given one is too short! (<2 chars)"));
+                } else {
+                    this.setCustomValidity("");
+                }
+            });
+
+            // validate sub type : to not be ""
+
+            document.getElementById("supplement").addEventListener("input", function () {
+                if (this.value === "") {
+                    this.setCustomValidity("Please select a supplement type!"); // this shouldn't ever trigger since we have the required att, but just in case.
                 } else {
                     this.setCustomValidity("");
                 }
