@@ -8,7 +8,8 @@
   }
 
   /* A.S: getting Montserrat for the main text and Robotop as secondary */
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Roboto:wght@400;500&display=swap'); /* https: //fonts.google.com/knowledge/using_type/loading_variable_fonts_on_the_web */
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Roboto:wght@400;500&display=swap');
+  /* https: //fonts.google.com/knowledge/using_type/loading_variable_fonts_on_the_web */
 
   body {
       font-family: "Montserrat";
@@ -93,6 +94,7 @@
 
   .order select {
       width: 25%;
+      font-family: "Roboto", sans-serif;
   }
 
   .order input#quantity {
