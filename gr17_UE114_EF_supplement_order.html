@@ -9,26 +9,20 @@
     <!--A.S: https://www.twilio.com/en-us/blog/international-phone-number-input-html-javascript#What-can-the-intl-tel-input-plugin-do -->
     <!--A.S: somebody made a country picker based on the tel picker : "https://github.com/mrmarkfrench/country-select-js" so we will use it. 
     What alarms me the most, is that the libs were made in that order, and not the opposite : ) -->
-    <!-- We wanted to keep this a mono index.html - the github guide wants us to have .css and .js as locales 
+    <!-- We wanted to keep this a mono index.html/css - the github guide wants us to have .css and .js as locales 
     - found the remotes at : https://cdnjs.com/libraries/country-select-js -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/css/countrySelect.css" />
+    <link rel="stylesheet" href="./index.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/js/countrySelect.min.js"></script>
-    <style>
-        .country-select .flag {
-            /* A.S: the initial lib is enforcing a local file for the flag at : https://github.com/mrmarkfrench/country-select-js/blob/master/build/css/countrySelect.css 
-            so I 've changed the flag class to use it's bg-image from the remote specified at cdnjs 
-            it's simply an inline img with all the flags - the lib has a custom selector that creates
-            the flag sprite from the orig. single img. at: https://github.com/mrmarkfrench/country-select-js/blob/master/src/scss/_sprites.scss*/
-            background-image: url(https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/img/flags.png);
-            /* url method as data pointer in https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/CSS_data_types */
-        }
-    </style>
 </head>
 
 <body>
-    <h1>Supplement Order Form</h1>
+    <h1>Supplement Order</h1>
+    <p>With our new subscription-based system, you no longer have to order supplements every end of the month, as well as think about 
+    manually choosing a complex each time you visit the site. With the best science-based combinations we have formulated,
+    you can now subscribe to a package and receive it automatically.</p>
     <form action="/aws/us-1/startup-overpriced-EC2-instace/submit_order" method="POST">
         <!-- A.S: suppose that https://aws.amazon.com/eventbridge/integrations/shopify/ -->
         <fieldset> <!-- M.F: https://www.w3schools.com/html/html_form_input_types.asp used for input types-->
@@ -74,30 +68,31 @@
         </fieldset>
         <fieldset>
             <legend> Order Details</legend>
-            <label for="supplement">Supplement Subscription:</label>
-            <!-- A.S: the model is a sub-like, generalized solution, so the UX is frictionless -->
-            <select id="supplement" name="supplement" required size="1">
-                <option value="">Select a supplement</option>
-                <option value="protein">Proteinogenesis</option>
-                <option value="akgcreatine">Energoergy</option>
-                <option value="electrolytesbcaa">Homeostasys</option>
-                <option value="multivitamin">Enzyme Regulation</option>
-            </select>
-
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"><br>
+            <div class="order">
+                <label for="supplement">Supplement Subscription:</label>
+                <!-- A.S: the model is a sub-like, generalized solution, so the UX is frictionless -->
+                <select id="supplement" name="supplement" required size="1">
+                    <option value="">Select a supplement</option>
+                    <option value="protein">Proteinogenesis</option>
+                    <option value="akgcreatine">Energoergy</option>
+                    <option value="electrolytesbcaa">Homeostasys</option>
+                    <option value="multivitamin">Enzyme Regulation</option>
+                </select>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="10" value="1"><br>
+            </div>
             <label for="additional">Additional Information</label><br>
             <textarea id="additional" name="additional" rows="4" cols="44"></textarea>
             <br><br>
             <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
             <label for="acceptTerms">I accept the terms of service and conditions.</label>
         </fieldset>
-        <br> <br>
+        <br> 
         <input type="submit" value="Submit Order">
+        <p>
+            <i>Thank you for your vote of confidence in our products</i>
+        </p>
     </form>
-    <p>
-        <i>Thank you for your vote of confidence in our products</i>
-    </p>
     <script>
         window.addEventListener("DOMContentLoaded", function () {
             // A.S: so input by definition cannot be null/empty since we use required in the form. we also do not ask for birth date since supplements are not age-restricted (FDA regulations).

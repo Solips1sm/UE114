@@ -1,0 +1,125 @@
+  .country-select .flag {
+      /* A.S: the initial lib is enforcing a local file for the flag at : https://github.com/mrmarkfrench/country-select-js/blob/master/build/css/countrySelect.css 
+            so I 've changed the flag class to use it's bg-image from the remote specified at cdnjs 
+            it's simply an inline img with all the flags - the lib has a custom selector that creates
+            the flag sprite from the orig. single img. at: https://github.com/mrmarkfrench/country-select-js/blob/master/src/scss/_sprites.scss*/
+      background-image: url(https://cdnjs.cloudflare.com/ajax/libs/country-select-js/2.1.1/img/flags.png);
+      /* url method as data pointer in https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units/CSS_data_types */
+  }
+
+  /* A.S: getting Montserrat for the main text and Robotop as secondary */
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Roboto:wght@400;500&display=swap'); /* https: //fonts.google.com/knowledge/using_type/loading_variable_fonts_on_the_web */
+
+  body {
+      font-family: "Montserrat";
+      background-color: #f4f4f7;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+  }
+
+  h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+  }
+
+  p {
+      text-align: center;
+      /* centering text with the bounds of the form */
+      max-width: 920px;
+      margin: auto;
+      color: #555;
+      padding: 1rem;
+  }
+
+  form {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  fieldset {
+      border: none;
+      padding: 20px 0;
+      margin: 0;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 14px;
+  }
+
+  fieldset:last-of-type {
+      /* A.S: removed the last border before terms*/
+      border-bottom: none;
+      padding: 0;
+      margin-bottom: 0;
+  }
+
+  legend {
+      font-weight: 600;
+      color: #283847;
+      padding: 0 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+      font-family: "Roboto";
+      width: 100%;
+      padding: 10px;
+      margin: 2px 0;
+      border: 1px solid #dbd9d9;
+      border-radius: 4px;
+      box-sizing: border-box;
+  }
+
+  label {
+      display: block;
+      margin-top: 12px;
+  }
+
+  .order {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+  }
+
+  .order select {
+      width: 25%;
+  }
+
+  .order input#quantity {
+      width: 15%;
+  }
+
+  label[for="acceptTerms"] {
+      display: inline;
+  }
+
+  label[for="acceptTerms"]:hover {
+      color: #5869b4;
+  }
+
+  input[type="submit"] {
+      background-color: #4285f1;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      font-family: "Montserrat";
+      font-weight: 500;
+      /* A.S: changed to be a bit bolder */
+      width: 100%;
+      transition: background-color 0.3s;
+  }
+
+  input[type="submit"]:hover {
+      background-color: #305fc7;
+  }
